@@ -114,7 +114,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         register_code(KC_DEL);
         unregister_code(KC_DEL);
         unregister_code(KC_LSFT);
-        add_mods(MOD_BIT(KC_LGUI));
+        register_mods(MOD_BIT(KC_LGUI));
         return false;
         break;
       case OS_COPY: // Copy (Ctrl+Insert)
@@ -123,7 +123,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         register_code(KC_INS);
         unregister_code(KC_INS);
         unregister_code(KC_LCTL);
-        add_mods(MOD_BIT(KC_LGUI));
+        register_mods(MOD_BIT(KC_LGUI));
         return false;
         break;
       case OS_PASTE: // Paste (Shift+Insert)
@@ -132,7 +132,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         register_code(KC_INS);
         unregister_code(KC_INS);
         unregister_code(KC_LSFT);
-        add_mods(MOD_BIT(KC_LGUI));
+        register_mods(MOD_BIT(KC_LGUI));
         return false;
         break;
       case OS_UNDO: // Undo (Ctrl+Z)
@@ -141,7 +141,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         register_code(DV_Z);
         unregister_code(DV_Z);
         unregister_code(KC_LCTL);
-        add_mods(MOD_BIT(KC_LGUI));
+        register_mods(MOD_BIT(KC_LGUI));
         return false;
         break;
       case OS_REDO: // Redo (Shift+Ctrl+Z)
@@ -152,7 +152,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         unregister_code(DV_Z);
         unregister_code(KC_LSFT);
         unregister_code(KC_LCTL);
-        add_mods(MOD_BIT(KC_LGUI));
+        register_mods(MOD_BIT(KC_LGUI));
         return false;
         break;
     }
