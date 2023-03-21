@@ -84,11 +84,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
      _______, _______, _______, _______, _______, _______,                            _______, _______, _______, _______, _______, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     _______, _______, _______, _______, OS_PASTE, OS_COPY,                           _______, _______, _______, OS_REDO, _______, _______,
+     _______, _______, _______, _______, KC_PASTE, KC_COPY,                           _______, _______, _______, KC_AGAIN, _______, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     _______, _______, _______, _______, OS_UNDO, _______,                            _______, _______, _______, _______, _______, _______,
+     _______, _______, _______, _______, KC_UNDO, _______,                            _______, _______, _______, _______, _______, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     _______, _______, _______, _______, _______, OS_CUT,  _______,          _______, _______, _______, _______, _______, _______, _______,
+     _______, _______, _______, _______, _______, KC_CUT,  _______,          _______, _______, _______, _______, _______, _______, _______,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                     _______, _______, _______,                   _______, _______, _______
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
@@ -96,6 +96,60 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+
+  // Release the GUI key if it was pressed before sending the keypress
+  if (record->event.pressed && keyboard_report->mods & MOD_BIT(KC_LGUI)) {
+    switch (keycode) {
+      case KC_CUT: // Cut (Shift+Delete)
+        unregister_mods(MOD_BIT(KC_LGUI));
+        register_code(KC_LSFT);
+        register_code(KC_DEL);
+        unregister_code(KC_DEL);
+        unregister_code(KC_LSFT);
+        add_mods(MOD_BIT(KC_LGUI));
+        return false;
+        break;
+      case KC_COPY: // Copy (Ctrl+Insert)
+        unregister_mods(MOD_BIT(KC_LGUI));
+        register_code(KC_LCTL);
+        register_code(KC_INS);
+        unregister_code(KC_INS);
+        unregister_code(KC_LCTL);
+        add_mods(MOD_BIT(KC_LGUI));
+        return false;
+        break;
+      case KC_PASTE: // Paste (Shift+Insert)
+        unregister_mods(MOD_BIT(KC_LGUI));
+        register_code(KC_LSFT);
+        register_code(KC_INS);
+        unregister_code(KC_INS);
+        unregister_code(KC_LSFT);
+        add_mods(MOD_BIT(KC_LGUI));
+        return false;
+        break;
+      case KC_UNDO: // Undo (Ctrl+Z)
+        unregister_mods(MOD_BIT(KC_LGUI));
+        register_code(KC_LCTL);
+        register_code(DV_Z);
+        unregister_code(DV_Z);
+        unregister_code(KC_LCTL);
+        add_mods(MOD_BIT(KC_LGUI));
+        return false;
+        break;
+      case KC_AGAIN: // Redo (Shift+Ctrl+Z)
+        unregister_mods(MOD_BIT(KC_LGUI));
+        register_code(KC_LCTL);
+        register_code(KC_LSFT);
+        register_code(DV_Z);
+        unregister_code(DV_Z);
+        unregister_code(KC_LSFT);
+        unregister_code(KC_LCTL);
+        add_mods(MOD_BIT(KC_LGUI));
+        return false;
+        break;
+    }
+  }
+
   switch (keycode) {
     case KC_LGUI:
       if (record->event.pressed) {
