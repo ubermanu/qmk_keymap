@@ -4,7 +4,12 @@ My keeb.io iris rev7 keymap
 
 ## Install
 
-Clone this repo in **qmk_firmware/keyboards/keebio/iris/keymaps/ubermanu**
+Clone this repo into your `qmk_firmware` folder:
+
+```bash
+cd ~/qmk_firmware/keyboards/keebio/iris/keymaps/
+git clone https://github.com/ubermanu/qmk_keymap ubermanu
+```
 
 ## Build
 
