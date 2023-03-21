@@ -21,6 +21,15 @@ enum custom_keycodes {
   OS_REDO,
 };
 
+#define SUPER_L LM(_COMMAND, MOD_LGUI)
+
+// TODO: add a layer for accents
+#define A_ACNTS LT(_A_ACCENTS, KC_A)
+#define O_ACNTS LT(_O_ACCENTS, KC_S)
+#define E_ACNTS LT(_E_ACCENTS, KC_D)
+#define U_ACNTS LT(_U_ACCENTS, KC_F)
+#define I_ACNTS LT(_I_ACCENTS, KC_G)
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_BASE] = LAYOUT(
@@ -33,7 +42,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
      KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_HOME,          KC_END,  KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
-                                    KC_LGUI, LOWER,   KC_SPC,                    KC_ENT,  RAISE,   KC_RALT
+                                    SUPER_L, LOWER,   KC_SPC,                    KC_ENT,  RAISE,   KC_RALT
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
   ),
 
@@ -101,28 +110,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
       case OS_CUT: // Cut (Shift+Delete)
         unregister_mods(MOD_BIT(KC_LGUI));
-        register_code(KC_LSFT);
-        register_code(KC_DEL);
-        unregister_code(KC_DEL);
-        unregister_code(KC_LSFT);
+        tap_code16(S(KC_DEL));
         add_mods(MOD_BIT(KC_LGUI));
         return false;
         break;
       case OS_COPY: // Copy (Ctrl+Insert)
         unregister_mods(MOD_BIT(KC_LGUI));
-        register_code(KC_LCTL);
-        register_code(KC_INS);
-        unregister_code(KC_INS);
-        unregister_code(KC_LCTL);
+        tap_code16(C(KC_INS));
         add_mods(MOD_BIT(KC_LGUI));
         return false;
         break;
       case OS_PASTE: // Paste (Shift+Insert)
         unregister_mods(MOD_BIT(KC_LGUI));
-        register_code(KC_LSFT);
-        register_code(KC_INS);
-        unregister_code(KC_INS);
-        unregister_code(KC_LSFT);
+        tap_code16(S(KC_INS));
         add_mods(MOD_BIT(KC_LGUI));
         return false;
         break;
@@ -150,14 +150,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   }
 
   switch (keycode) {
-    case KC_LGUI:
-      if (record->event.pressed) {
-        layer_on(_COMMAND);
-      } else {
-        layer_off(_COMMAND);
-      }
-      return true;
-      break;
     case BASE:
       if (record->event.pressed) {
         set_single_persistent_default_layer(_BASE);
