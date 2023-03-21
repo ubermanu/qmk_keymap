@@ -110,19 +110,28 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
       case OS_CUT: // Cut (Shift+Delete)
         unregister_mods(MOD_BIT(KC_LGUI));
-        tap_code16(S(KC_DEL));
+        register_code(KC_LSFT);
+        register_code(KC_DEL);
+        unregister_code(KC_DEL);
+        unregister_code(KC_LSFT);
         add_mods(MOD_BIT(KC_LGUI));
         return false;
         break;
       case OS_COPY: // Copy (Ctrl+Insert)
         unregister_mods(MOD_BIT(KC_LGUI));
-        tap_code16(C(KC_INS));
+        register_code(KC_LCTL);
+        register_code(KC_INS);
+        unregister_code(KC_INS);
+        unregister_code(KC_LCTL);
         add_mods(MOD_BIT(KC_LGUI));
         return false;
         break;
       case OS_PASTE: // Paste (Shift+Insert)
         unregister_mods(MOD_BIT(KC_LGUI));
-        tap_code16(S(KC_INS));
+        register_code(KC_LSFT);
+        register_code(KC_INS);
+        unregister_code(KC_INS);
+        unregister_code(KC_LSFT);
         add_mods(MOD_BIT(KC_LGUI));
         return false;
         break;
