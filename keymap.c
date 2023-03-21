@@ -14,13 +14,12 @@ enum custom_keycodes {
   RAISE,
   ADJUST,
   COMMAND,
+  OS_COPY,
+  OS_CUT,
+  OS_PASTE,
+  OS_UNDO,
+  OS_REDO,
 };
-
-#define OS_COPY C(KC_INS)
-#define OS_CUT S(KC_DEL)
-#define OS_PASTE S(KC_INS)
-#define OS_UNDO C(DV_Z)
-#define OS_REDO C(DV_R)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -84,11 +83,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
      _______, _______, _______, _______, _______, _______,                            _______, _______, _______, _______, _______, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     _______, _______, _______, _______, KC_PASTE, KC_COPY,                           _______, _______, _______, KC_AGAIN, _______, _______,
+     _______, _______, _______, _______, OS_PASTE, OS_COPY,                           _______, _______, _______, OS_REDO, _______, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     _______, _______, _______, _______, KC_UNDO, _______,                            _______, _______, _______, _______, _______, _______,
+     _______, _______, _______, _______, OS_UNDO, _______,                            _______, _______, _______, _______, _______, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     _______, _______, _______, _______, _______, KC_CUT,  _______,          _______, _______, _______, _______, _______, _______, _______,
+     _______, _______, _______, _______, _______, OS_CUT,  _______,          _______, _______, _______, _______, _______, _______, _______,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                     _______, _______, _______,                   _______, _______, _______
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
@@ -100,7 +99,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   // Release the GUI key if it was pressed before sending the keypress
   if (record->event.pressed && keyboard_report->mods & MOD_BIT(KC_LGUI)) {
     switch (keycode) {
-      case KC_CUT: // Cut (Shift+Delete)
+      case OS_CUT: // Cut (Shift+Delete)
         unregister_mods(MOD_BIT(KC_LGUI));
         register_code(KC_LSFT);
         register_code(KC_DEL);
@@ -109,7 +108,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         add_mods(MOD_BIT(KC_LGUI));
         return false;
         break;
-      case KC_COPY: // Copy (Ctrl+Insert)
+      case OS_COPY: // Copy (Ctrl+Insert)
         unregister_mods(MOD_BIT(KC_LGUI));
         register_code(KC_LCTL);
         register_code(KC_INS);
@@ -118,7 +117,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         add_mods(MOD_BIT(KC_LGUI));
         return false;
         break;
-      case KC_PASTE: // Paste (Shift+Insert)
+      case OS_PASTE: // Paste (Shift+Insert)
         unregister_mods(MOD_BIT(KC_LGUI));
         register_code(KC_LSFT);
         register_code(KC_INS);
@@ -127,7 +126,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         add_mods(MOD_BIT(KC_LGUI));
         return false;
         break;
-      case KC_UNDO: // Undo (Ctrl+Z)
+      case OS_UNDO: // Undo (Ctrl+Z)
         unregister_mods(MOD_BIT(KC_LGUI));
         register_code(KC_LCTL);
         register_code(DV_Z);
@@ -136,7 +135,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         add_mods(MOD_BIT(KC_LGUI));
         return false;
         break;
-      case KC_AGAIN: // Redo (Shift+Ctrl+Z)
+      case OS_REDO: // Redo (Shift+Ctrl+Z)
         unregister_mods(MOD_BIT(KC_LGUI));
         register_code(KC_LCTL);
         register_code(KC_LSFT);
